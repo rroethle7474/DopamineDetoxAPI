@@ -4,10 +4,16 @@ trigger:
       - main
 
 variables:
-  solution: '**/*.sln'
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
-  dotNetVersion: '8.0.x'
+  - group: SMD-Test-Variables
+  - group: SMD-Prod-Variables
+  - name: solution
+    value: '**/*.sln'
+  - name: buildPlatform
+    value: 'Any CPU'
+  - name: buildConfiguration
+    value: 'Release'
+  - name: dotNetVersion
+    value: '8.0.x'
 
 stages:
 - stage: Build
