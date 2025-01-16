@@ -95,6 +95,10 @@ stages:
               appName: 'smd-webapi-test'
               package: '$(Pipeline.Workspace)/webapi/*.zip'
               deploymentMethod: 'auto'
+              appSettings: |
+                WEBSITE_RUN_FROM_PACKAGE=0
+                SCM_DO_BUILD_DURING_DEPLOYMENT=true
+                ASPNETCORE_ENVIRONMENT=Development
               appSettings: >
                 -Logging__LogLevel__Default "Information"
                 -Logging__LogLevel__Microsoft.AspNetCore "Warning"
