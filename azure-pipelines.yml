@@ -95,22 +95,21 @@ stages:
               appName: 'smd-webapi-test'
               package: '$(Pipeline.Workspace)/webapi/*.zip'
               deploymentMethod: 'auto'
-              appSettings: |
-                WEBSITE_RUN_FROM_PACKAGE=0
-                SCM_DO_BUILD_DURING_DEPLOYMENT=true
-                ASPNETCORE_ENVIRONMENT=Development
               appSettings: >
+                -WEBSITE_RUN_FROM_PACKAGE "0"
+                -SCM_DO_BUILD_DURING_DEPLOYMENT "true"
+                -ASPNETCORE_ENVIRONMENT "Development"
                 -Logging__LogLevel__Default "Information"
                 -Logging__LogLevel__Microsoft.AspNetCore "Warning"
                 -TwitterAPI__timelineEmbedUrl "$(TimelineEmbedUrl)"
                 -NotificationSettings__SendGridApiKey "@Microsoft.KeyVault(SecretUri=https://test-key-vault-v2.vault.azure.net/secrets/SMD--SendGridApiKey)"
-                -NotificationSettings__SendGridFromEmail "$(TestSendGridFromEmail)"
-                -NotificationSettings__SendGridFromName "$(TestSendGridFromName)"
-                -AppSettings__DopamineDetoxUrl "$(TestDopamineDetoxUrl)"
+                -NotificationSettings__SendGridFromEmail "$(SendGridFromEmail)"
+                -NotificationSettings__SendGridFromName "$(SendGridFromName)"
+                -AppSettings__DopamineDetoxUrl "$(DopamineDetoxUrl)"
                 -AppSettings__OPENAI_API_KEY "@Microsoft.KeyVault(SecretUri=https://test-key-vault-v2.vault.azure.net/secrets/OpenAI--Api-Key)"
                 -Jwt__Key "@Microsoft.KeyVault(SecretUri=https://test-key-vault-v2.vault.azure.net/secrets/SMD--JwtKey)"
-                -Jwt__Issuer "$(TestJwtIssuer)"
-                -Jwt__Audience "$(TestJwtAudience)"
+                -Jwt__Issuer "$(JwtIssuer)"
+                -Jwt__Audience "$(JwtAudience)"
                 -Authentication__Google__ClientId "@Microsoft.KeyVault(SecretUri=https://test-key-vault-v2.vault.azure.net/secrets/Google--ClientId)"
                 -Authentication__Google__ClientSecret "@Microsoft.KeyVault(SecretUri=https://test-key-vault-v2.vault.azure.net/secrets/Google--ClientSecret)"
                 -ConnectionStrings__DefaultConnection "@Microsoft.KeyVault(SecretUri=https://test-key-vault-v2.vault.azure.net/secrets/ProjectDb--SQL-DefaultConnectionString)"
@@ -144,17 +143,20 @@ stages:
               package: '$(Pipeline.Workspace)/webapi/*.zip'
               deploymentMethod: 'auto'
               appSettings: >
+                -WEBSITE_RUN_FROM_PACKAGE "0"
+                -SCM_DO_BUILD_DURING_DEPLOYMENT "true"
+                -ASPNETCORE_ENVIRONMENT "Production"
                 -Logging__LogLevel__Default "Information"
                 -Logging__LogLevel__Microsoft.AspNetCore "Warning"
                 -TwitterAPI__timelineEmbedUrl "$(TimelineEmbedUrl)"
                 -NotificationSettings__SendGridApiKey "@Microsoft.KeyVault(SecretUri=https://prod-key-vault-v1.vault.azure.net/secrets/SMD--SendGridApiKey)"
-                -NotificationSettings__SendGridFromEmail "$(ProdSendGridFromEmail)"
-                -NotificationSettings__SendGridFromName "$(ProdSendGridFromName)"
-                -AppSettings__DopamineDetoxUrl "$(ProdDopamineDetoxUrl)"
+                -NotificationSettings__SendGridFromEmail "$(SendGridFromEmail)"
+                -NotificationSettings__SendGridFromName "$(SendGridFromName)"
+                -AppSettings__DopamineDetoxUrl "$(DopamineDetoxUrl)"
                 -AppSettings__OPENAI_API_KEY "@Microsoft.KeyVault(SecretUri=https://prod-key-vault-v1.vault.azure.net/secrets/OpenAI--Api-Key)"
                 -Jwt__Key "@Microsoft.KeyVault(SecretUri=https://prod-key-vault-v1.vault.azure.net/secrets/SMD--JwtKey)"
-                -Jwt__Issuer "$(ProdJwtIssuer)"
-                -Jwt__Audience "$(ProdJwtAudience)"
+                -Jwt__Issuer "$(JwtIssuer)"
+                -Jwt__Audience "$(JwtAudience)"
                 -Authentication__Google__ClientId "@Microsoft.KeyVault(SecretUri=https://prod-key-vault-v1.vault.azure.net/secrets/Google--ClientId)"
                 -Authentication__Google__ClientSecret "@Microsoft.KeyVault(SecretUri=https://prod-key-vault-v1.vault.azure.net/secrets/Google--ClientSecret)"
                 -ConnectionStrings__DefaultConnection "@Microsoft.KeyVault(SecretUri=https://prod-key-vault-v1.vault.azure.net/secrets/ProjectDb--SQL-DefaultConnectionString)"
