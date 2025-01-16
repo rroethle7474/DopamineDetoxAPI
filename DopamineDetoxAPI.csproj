@@ -10,7 +10,7 @@
     <PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="Azure.Communication.Email" Version="1.0.1" />
     <PackageReference Include="Azure.Identity" Version="1.13.1" />
-    <PackageReference Include="DopamineDetox.Domain" Version="1.0.40" />
+    <PackageReference Include="DopamineDetox.Domain" Version="0.0.2" />
     <PackageReference Include="DopamineDetox.ServiceAgent" Version="0.0.2" />
     <PackageReference Include="Google.Apis.Auth" Version="1.68.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="8.0.7" />
