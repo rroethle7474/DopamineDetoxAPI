@@ -189,20 +189,20 @@ if (app.Environment.IsDevelopment())
 }
 
 // Add detailed error handling
-app.Use(async (context, next) =>
-{
-    try
-    {
-        await next();
-    }
-    catch (Exception ex)
-    {
-        var logger = context.RequestServices
-            .GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "Unhandled exception");
-        throw;
-    }
-});
+//app.Use(async (context, next) =>
+//{
+//    try
+//    {
+//        await next();
+//    }
+//    catch (Exception ex)
+//    {
+//        var logger = context.RequestServices
+//            .GetRequiredService<ILogger<Program>>();
+//        logger.LogError(ex, "Unhandled exception");
+//        throw;
+//    }
+//});
 
 app.UseAuthorization();
 
