@@ -56,9 +56,18 @@ stages:
       displayName: 'Publish Web API'
       inputs:
         command: 'publish'
-        publishWebProjects: true
-        arguments: '--configuration $(buildConfiguration) --output "$(Build.ArtifactStagingDirectory)" --runtime win-x64 --self-contained false /p:WebPublishMethod=Package /p:EnvironmentName=Production'
-        zipAfterPublish: true
+        projects: '**/*.csproj'
+        arguments: '--configuration $(buildConfiguration) --output "$(Build.ArtifactStagingDirectory)" /p:WebPublishMethod=FileSystem /p:DeleteExistingFiles=true'
+        zipAfterPublish: false
+        modifyOutputPath: true
+
+    - task: ArchiveFiles@2
+      inputs:
+        rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/s/DopamineDetoxAPI'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/webapi.zip'
+        replaceExistingArchive: true
 
     - task: PublishBuildArtifacts@1
       displayName: 'Publish Artifact'
@@ -93,10 +102,13 @@ stages:
             inputs:
               azureSubscription: 'SocialMediaDetoxConnection'
               appName: 'smd-webapi-test'
-              package: '$(Pipeline.Workspace)/webapi/*.zip'
-              deploymentMethod: 'zipDeploy'
+              package: '$(Build.ArtifactStagingDirectory)/webapi.zip'
+              deploymentMethod: 'auto'
+              enableCustomDeployment: true
               removeAdditionalFilesFlag: true
               appSettings: >
+                -WEBSITE_RUN_FROM_PACKAGE "0"
+                -ASPNETCORE_ENVIRONMENT "Test"
                 -WEBSITE_RUN_FROM_PACKAGE "0"
                 -SCM_DO_BUILD_DURING_DEPLOYMENT "true"
                 -ASPNETCORE_ENVIRONMENT "Test"
