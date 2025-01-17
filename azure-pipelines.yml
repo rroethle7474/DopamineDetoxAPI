@@ -61,12 +61,29 @@ stages:
         zipAfterPublish: false
 
     - task: PowerShell@2
+      displayName: 'List Directory Contents'
+      inputs:
+        targetType: 'inline'
+        script: |
+          Write-Host "Listing source directory:"
+          Get-ChildItem -Path $(Build.SourcesDirectory) -Recurse | Where-Object { $_.Name -eq 'web.config' }
+          
+          Write-Host "Listing staging directory:"
+          Get-ChildItem -Path $(Build.ArtifactStagingDirectory) -Recurse
+
+    - task: PowerShell@2
       displayName: 'Copy web.config'
       inputs:
         targetType: 'inline'
         script: |
-          Copy-Item -Path "$(Build.SourcesDirectory)/DopamineDetoxAPI/web.config" -Destination "$(Build.ArtifactStagingDirectory)/web.config" -Force
-          Write-Host "Copied web.config to artifact staging directory"
+          $webConfigSource = Get-ChildItem -Path $(Build.SourcesDirectory) -Recurse | Where-Object { $_.Name -eq 'web.config' } | Select-Object -First 1 -ExpandProperty FullName
+          if ($webConfigSource) {
+            Write-Host "Found web.config at: $webConfigSource"
+            Copy-Item -Path $webConfigSource -Destination "$(Build.ArtifactStagingDirectory)" -Force
+            Write-Host "Copied web.config to artifact staging directory"
+          } else {
+            Write-Error "Could not find web.config file"
+          }
 
     - task: ArchiveFiles@2
       inputs:
