@@ -182,13 +182,32 @@ stages:
               KeyVaultName: 'prod-key-vault-v1'
               RunAsPreJob: false
 
+          - task: AzureCLI@2
+            displayName: 'Stop Web App'
+            inputs:
+              azureSubscription: 'SocialMediaDetoxConnection'
+              scriptType: 'ps'
+              scriptLocation: 'inlineScript'
+              inlineScript: |
+                az webapp stop --name 'smd-webapi-prod' --resource-group 'social-media-detox'
+
           - task: AzureWebApp@1
             inputs:
               azureSubscription: 'SocialMediaDetoxConnection'
               appName: 'smd-webapi-prod'
-              package: '$(Pipeline.Workspace)/webapi/*.zip'
-              deploymentMethod: 'zipDeploy'
+              package: '$(Pipeline.Workspace)/webapi/webapi.zip'
+              deploymentMethod: 'auto'
+              enableCustomDeployment: true
               removeAdditionalFilesFlag: true
+
+          - task: AzureCLI@2
+            displayName: 'Start Web App'
+            inputs:
+              azureSubscription: 'SocialMediaDetoxConnection'
+              scriptType: 'ps'
+              scriptLocation: 'inlineScript'
+              inlineScript: |
+                az webapp start --name 'smd-webapi-prod' --resource-group 'social-media-detox'
               appSettings: >
                 -WEBSITE_RUN_FROM_PACKAGE "0"
                 -SCM_DO_BUILD_DURING_DEPLOYMENT "true"
