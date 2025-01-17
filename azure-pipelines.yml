@@ -60,34 +60,18 @@ stages:
         arguments: '--configuration $(buildConfiguration) --output "$(Build.ArtifactStagingDirectory)" /p:WebPublishMethod=FileSystem /p:DeleteExistingFiles=true'
         zipAfterPublish: false
 
+    # Optional if you still want to see the directory contents
     - task: PowerShell@2
       displayName: 'List Directory Contents'
       inputs:
         targetType: 'inline'
         script: |
-          Write-Host "Listing source directory:"
-          Get-ChildItem -Path $(Build.SourcesDirectory) -Recurse | Where-Object { $_.Name -eq 'web.config' }
-          
-          Write-Host "Listing staging directory:"
+          Write-Host "Listing staging directory contents:"
           Get-ChildItem -Path $(Build.ArtifactStagingDirectory) -Recurse
-
-    - task: PowerShell@2
-      displayName: 'Copy web.config'
-      inputs:
-        targetType: 'inline'
-        script: |
-          $webConfigSource = Get-ChildItem -Path $(Build.SourcesDirectory) -Recurse | Where-Object { $_.Name -eq 'web.config' } | Select-Object -First 1 -ExpandProperty FullName
-          if ($webConfigSource) {
-            Write-Host "Found web.config at: $webConfigSource"
-            Copy-Item -Path $webConfigSource -Destination "$(Build.ArtifactStagingDirectory)" -Force
-            Write-Host "Copied web.config to artifact staging directory"
-          } else {
-            Write-Error "Could not find web.config file"
-          }
 
     - task: ArchiveFiles@2
       inputs:
-        rootFolderOrFile: '$(Build.ArtifactStagingDirectory)'
+        rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/s'
         includeRootFolder: false
         archiveType: 'zip'
         archiveFile: '$(Build.ArtifactStagingDirectory)/webapi.zip'
