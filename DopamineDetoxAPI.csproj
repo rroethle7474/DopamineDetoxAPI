@@ -30,7 +30,11 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.0.1" />
   </ItemGroup>
-
+	<ItemGroup>
+		<Content Update="web.config">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
   <ItemGroup>
     <Folder Include="Migrations\" />
   </ItemGroup>
