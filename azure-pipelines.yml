@@ -60,6 +60,14 @@ stages:
         arguments: '--configuration $(buildConfiguration) --output "$(Build.ArtifactStagingDirectory)" /p:WebPublishMethod=FileSystem /p:DeleteExistingFiles=true'
         zipAfterPublish: false
 
+    - task: PowerShell@2
+      displayName: 'Copy web.config'
+      inputs:
+        targetType: 'inline'
+        script: |
+          Copy-Item -Path "$(Build.SourcesDirectory)/DopamineDetoxAPI/web.config" -Destination "$(Build.ArtifactStagingDirectory)/web.config" -Force
+          Write-Host "Copied web.config to artifact staging directory"
+
     - task: ArchiveFiles@2
       inputs:
         rootFolderOrFile: '$(Build.ArtifactStagingDirectory)'
