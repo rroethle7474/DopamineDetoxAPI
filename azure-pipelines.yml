@@ -59,15 +59,21 @@ stages:
         projects: '**/*.csproj'
         arguments: '--configuration $(buildConfiguration) --output "$(Build.ArtifactStagingDirectory)" /p:WebPublishMethod=FileSystem /p:DeleteExistingFiles=true'
         zipAfterPublish: false
-        modifyOutputPath: true
 
     - task: ArchiveFiles@2
       inputs:
-        rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/s/DopamineDetoxAPI'
+        rootFolderOrFile: '$(Build.ArtifactStagingDirectory)'
         includeRootFolder: false
         archiveType: 'zip'
         archiveFile: '$(Build.ArtifactStagingDirectory)/webapi.zip'
         replaceExistingArchive: true
+
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Artifact'
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)/webapi.zip'
+        ArtifactName: 'webapi'
+        publishLocation: 'Container'
 
     - task: PublishBuildArtifacts@1
       displayName: 'Publish Artifact'
@@ -102,7 +108,7 @@ stages:
             inputs:
               azureSubscription: 'SocialMediaDetoxConnection'
               appName: 'smd-webapi-test'
-              package: '$(Build.ArtifactStagingDirectory)/webapi.zip'
+              package: '$(Pipeline.Workspace)/webapi/webapi.zip'
               deploymentMethod: 'auto'
               enableCustomDeployment: true
               removeAdditionalFilesFlag: true
