@@ -186,7 +186,7 @@ stages:
               deploymentMethod: 'auto'
               enableCustomDeployment: true
               removeAdditionalFilesFlag: true
-              appSettings: |-
+              appSettings: >-
                 -ASPNETCORE_ENVIRONMENT "Production"
                 -Logging__LogLevel__Default "Information"
                 -Logging__LogLevel__Microsoft.AspNetCore "Warning"
