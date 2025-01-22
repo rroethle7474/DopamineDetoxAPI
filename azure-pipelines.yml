@@ -108,8 +108,9 @@ stages:
               inlineScript: |
                 az webapp stop --name 'smd-webapi-test' --resource-group 'social-media-detox'
           
-          # ========== CRITICAL FIX: AppSettings moved here ==========
+          # Fixed appSettings syntax below
           - task: AzureWebApp@1
+            displayName: 'Deploy to Test Web App'
             inputs:
               azureSubscription: 'SocialMediaDetoxConnection'
               appName: 'smd-webapi-test'
@@ -118,21 +119,21 @@ stages:
               enableCustomDeployment: true
               removeAdditionalFilesFlag: true
               appSettings: |
-                -ASPNETCORE_ENVIRONMENT "Test"
-                -Logging__LogLevel__Default "Information"
-                -Logging__LogLevel__Microsoft.AspNetCore "Warning"
-                -TwitterAPI__timelineEmbedUrl "$(TimelineEmbedUrl)"
-                -NotificationSettings__SendGridApiKey "@Microsoft.KeyVault(SecretUri=https://test-key-vault-v2.vault.azure.net/secrets/SMD--SendGridApiKey)"
-                -NotificationSettings__SendGridFromEmail "$(SendGridFromEmail)"
-                -NotificationSettings__SendGridFromName "$(SendGridFromName)"
-                -AppSettings__DopamineDetoxUrl "$(DopamineDetoxUrl)"
-                -AppSettings__OPENAI_API_KEY "@Microsoft.KeyVault(SecretUri=https://test-key-vault-v2.vault.azure.net/secrets/OpenAI--Api-Key)"
-                -Jwt__Key "@Microsoft.KeyVault(SecretUri=https://test-key-vault-v2.vault.azure.net/secrets/SMD--JwtKey)"
-                -Jwt__Issuer "$(JwtIssuer)"
-                -Jwt__Audience "$(JwtAudience)"
-                -Authentication__Google__ClientId "@Microsoft.KeyVault(SecretUri=https://test-key-vault-v2.vault.azure.net/secrets/Google--ClientId)"
-                -Authentication__Google__ClientSecret "@Microsoft.KeyVault(SecretUri=https://test-key-vault-v2.vault.azure.net/secrets/Google--ClientSecret)"
-                -ConnectionStrings__DefaultConnection "@Microsoft.KeyVault(SecretUri=https://test-key-vault-v2.vault.azure.net/secrets/ProjectDb--SQL-DefaultConnectionString)"
+                ASPNETCORE_ENVIRONMENT=Test
+                Logging__LogLevel__Default=Information
+                Logging__LogLevel__Microsoft.AspNetCore=Warning
+                TwitterAPI__timelineEmbedUrl=$(TimelineEmbedUrl)
+                NotificationSettings__SendGridApiKey=@Microsoft.KeyVault(SecretUri=https://test-key-vault-v2.vault.azure.net/secrets/SMD--SendGridApiKey)
+                NotificationSettings__SendGridFromEmail=$(SendGridFromEmail)
+                NotificationSettings__SendGridFromName=$(SendGridFromName)
+                AppSettings__DopamineDetoxUrl=$(DopamineDetoxUrl)
+                AppSettings__OPENAI_API_KEY=@Microsoft.KeyVault(SecretUri=https://test-key-vault-v2.vault.azure.net/secrets/OpenAI--Api-Key)
+                Jwt__Key=@Microsoft.KeyVault(SecretUri=https://test-key-vault-v2.vault.azure.net/secrets/SMD--JwtKey)
+                Jwt__Issuer=$(JwtIssuer)
+                Jwt__Audience=$(JwtAudience)
+                Authentication__Google__ClientId=@Microsoft.KeyVault(SecretUri=https://test-key-vault-v2.vault.azure.net/secrets/Google--ClientId)
+                Authentication__Google__ClientSecret=@Microsoft.KeyVault(SecretUri=https://test-key-vault-v2.vault.azure.net/secrets/Google--ClientSecret)
+                ConnectionStrings__DefaultConnection=@Microsoft.KeyVault(SecretUri=https://test-key-vault-v2.vault.azure.net/secrets/ProjectDb--SQL-DefaultConnectionString)
 
           - task: AzureCLI@2
             displayName: 'Start Web App'
@@ -176,8 +177,9 @@ stages:
               inlineScript: |
                 az webapp stop --name 'smd-webapi-prod' --resource-group 'social-media-detox'
 
-          # ========== CRITICAL FIX: Prod AppSettings moved here ==========
+          # Fixed appSettings syntax below
           - task: AzureWebApp@1
+            displayName: 'Deploy to Prod Web App'
             inputs:
               azureSubscription: 'SocialMediaDetoxConnection'
               appName: 'smd-webapi-prod'
@@ -186,21 +188,21 @@ stages:
               enableCustomDeployment: true
               removeAdditionalFilesFlag: true
               appSettings: |
-                -ASPNETCORE_ENVIRONMENT "Production"
-                -Logging__LogLevel__Default "Information"
-                -Logging__LogLevel__Microsoft.AspNetCore "Warning"
-                -TwitterAPI__timelineEmbedUrl "$(TimelineEmbedUrl)"
-                -NotificationSettings__SendGridApiKey "@Microsoft.KeyVault(SecretUri=https://prod-key-vault-v1.vault.azure.net/secrets/SMD--SendGridApiKey)"
-                -NotificationSettings__SendGridFromEmail "$(SendGridFromEmail)"
-                -NotificationSettings__SendGridFromName "$(SendGridFromName)"
-                -AppSettings__DopamineDetoxUrl "$(DopamineDetoxUrl)"
-                -AppSettings__OPENAI_API_KEY "@Microsoft.KeyVault(SecretUri=https://prod-key-vault-v1.vault.azure.net/secrets/OpenAI--Api-Key)"
-                -Jwt__Key "@Microsoft.KeyVault(SecretUri=https://prod-key-vault-v1.vault.azure.net/secrets/SMD--JwtKey)"
-                -Jwt__Issuer "$(JwtIssuer)"
-                -Jwt__Audience "$(JwtAudience)"
-                -Authentication__Google__ClientId "@Microsoft.KeyVault(SecretUri=https://prod-key-vault-v1.vault.azure.net/secrets/Google--ClientId)"
-                -Authentication__Google__ClientSecret "@Microsoft.KeyVault(SecretUri=https://prod-key-vault-v1.vault.azure.net/secrets/Google--ClientSecret)"
-                -ConnectionStrings__DefaultConnection "@Microsoft.KeyVault(SecretUri=https://prod-key-vault-v1.vault.azure.net/secrets/ProjectDb--SQL-DefaultConnectionString)"
+                ASPNETCORE_ENVIRONMENT=Production
+                Logging__LogLevel__Default=Information
+                Logging__LogLevel__Microsoft.AspNetCore=Warning
+                TwitterAPI__timelineEmbedUrl=$(TimelineEmbedUrl)
+                NotificationSettings__SendGridApiKey=@Microsoft.KeyVault(SecretUri=https://prod-key-vault-v1.vault.azure.net/secrets/SMD--SendGridApiKey)
+                NotificationSettings__SendGridFromEmail=$(SendGridFromEmail)
+                NotificationSettings__SendGridFromName=$(SendGridFromName)
+                AppSettings__DopamineDetoxUrl=$(DopamineDetoxUrl)
+                AppSettings__OPENAI_API_KEY=@Microsoft.KeyVault(SecretUri=https://prod-key-vault-v1.vault.azure.net/secrets/OpenAI--Api-Key)
+                Jwt__Key=@Microsoft.KeyVault(SecretUri=https://prod-key-vault-v1.vault.azure.net/secrets/SMD--JwtKey)
+                Jwt__Issuer=$(JwtIssuer)
+                Jwt__Audience=$(JwtAudience)
+                Authentication__Google__ClientId=@Microsoft.KeyVault(SecretUri=https://prod-key-vault-v1.vault.azure.net/secrets/Google--ClientId)
+                Authentication__Google__ClientSecret=@Microsoft.KeyVault(SecretUri=https://prod-key-vault-v1.vault.azure.net/secrets/Google--ClientSecret)
+                ConnectionStrings__DefaultConnection=@Microsoft.KeyVault(SecretUri=https://prod-key-vault-v1.vault.azure.net/secrets/ProjectDb--SQL-DefaultConnectionString)
 
           - task: AzureCLI@2
             displayName: 'Start Web App'
