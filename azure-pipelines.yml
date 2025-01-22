@@ -4,8 +4,6 @@ trigger:
       - main
 
 variables:
-  - group: SMD-Test-Variables
-  - group: SMD-Prod-Variables
   - name: solution
     value: '**/*.sln'
   - name: buildPlatform
@@ -17,6 +15,8 @@ variables:
 
 stages:
 - stage: Build
+  variables:
+    - group: SMD-Test-Variables
   jobs:
   - job: BuildJob
     pool:
@@ -60,7 +60,6 @@ stages:
         arguments: '--configuration $(buildConfiguration) --output "$(Build.ArtifactStagingDirectory)" /p:WebPublishMethod=FileSystem /p:DeleteExistingFiles=true'
         zipAfterPublish: false
 
-    # Optional if you still want to see the directory contents
     - task: PowerShell@2
       displayName: 'List Directory Contents'
       inputs:
@@ -92,6 +91,8 @@ stages:
         publishLocation: 'Container'
 
 - stage: DeployToTest
+  variables:
+    - group: SMD-Test-Variables
   dependsOn: Build
   condition: succeeded()
   jobs:
@@ -161,6 +162,8 @@ stages:
                 -ConnectionStrings__DefaultConnection "@Microsoft.KeyVault(SecretUri=https://test-key-vault-v2.vault.azure.net/secrets/ProjectDb--SQL-DefaultConnectionString)"
 
 - stage: DeployToProd
+  variables:
+    - group: SMD-Prod-Variables
   dependsOn: DeployToTest
   condition: succeeded()
   jobs:
