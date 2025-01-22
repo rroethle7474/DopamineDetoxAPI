@@ -65,6 +65,9 @@ builder.Services.AddAutoMapper(cfg =>
     cfg.AddProfile<LearnMoreDetailsMappingProfile>();
 });
 
+builder.Services.Configure<NotificationSettings>(
+    builder.Configuration.GetSection("NotificationSettings"));
+
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<IContentTypeService, ContentTypeService>();
 builder.Services.AddScoped<ISearchResultService, SearchResultService>();
@@ -156,6 +159,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
+
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+Console.WriteLine($"Setting up database connection... {connectionString}");
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
