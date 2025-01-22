@@ -97,6 +97,8 @@ stages:
   condition: succeeded()
   jobs:
   - deployment: DeployTest
+    variables:
+      - group: SMD-Test-Variables
     environment: 'test'
     pool:
       vmImage: 'windows-latest'
@@ -168,6 +170,8 @@ stages:
   condition: succeeded()
   jobs:
   - deployment: DeployProd
+    variables:
+      - group: SMD-Prod-Variables
     environment: 'production'
     pool:
       vmImage: 'windows-latest'
