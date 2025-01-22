@@ -122,7 +122,6 @@ stages:
                 ASPNETCORE_ENVIRONMENT=Test
                 Logging__LogLevel__Default=Information
                 Logging__LogLevel__Microsoft.AspNetCore=Warning
-                TwitterAPI__timelineEmbedUrl=$(TimelineEmbedUrl)
                 NotificationSettings__SendGridApiKey=@Microsoft.KeyVault(SecretUri=https://test-key-vault-v2.vault.azure.net/secrets/SMD--SendGridApiKey)
                 NotificationSettings__SendGridFromEmail=$(SendGridFromEmail)
                 NotificationSettings__SendGridFromName=$(SendGridFromName)
@@ -191,7 +190,6 @@ stages:
                 ASPNETCORE_ENVIRONMENT=Production
                 Logging__LogLevel__Default=Information
                 Logging__LogLevel__Microsoft.AspNetCore=Warning
-                TwitterAPI__timelineEmbedUrl=$(TimelineEmbedUrl)
                 NotificationSettings__SendGridApiKey=@Microsoft.KeyVault(SecretUri=https://prod-key-vault-v1.vault.azure.net/secrets/SMD--SendGridApiKey)
                 NotificationSettings__SendGridFromEmail=$(SendGridFromEmail)
                 NotificationSettings__SendGridFromName=$(SendGridFromName)
