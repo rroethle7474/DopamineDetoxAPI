@@ -209,12 +209,10 @@ if (app.Environment.IsDevelopment())
 //        throw;
 //    }
 //});
-
+app.UseCors("AllowAll");
 app.UseAuthorization();
 
 app.MapControllers();
-
-app.UseCors("AllowAll");
 
 app.Run();
 
