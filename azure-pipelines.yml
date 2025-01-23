@@ -116,6 +116,8 @@ stages:
               appName: 'smd-webapi-test'
               package: '$(Pipeline.Workspace)/webapi/webapi.zip'
               deploymentMethod: 'auto'
+              enableCustomDeployment: true
+              removeAdditionalFilesFlag: true
               appSettings: >-
                 -WEBSITE_RUN_FROM_PACKAGE "0"
                 -ASPNETCORE_ENVIRONMENT "Test"
@@ -183,6 +185,8 @@ stages:
               appName: 'smd-webapi-prod'
               package: '$(Pipeline.Workspace)/webapi/webapi.zip'
               deploymentMethod: 'auto'
+              enableCustomDeployment: true
+              removeAdditionalFilesFlag: true
               appSettings: >-
                 -WEBSITE_RUN_FROM_PACKAGE "0"
                 -ASPNETCORE_ENVIRONMENT "Production"
