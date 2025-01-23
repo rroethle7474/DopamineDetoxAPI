@@ -74,11 +74,12 @@ namespace DopamineDetoxAPI.Controllers
                 }
                 return BadRequest(result.Errors);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                await _loggingService.LogErrorAsync("500",e.Message, e.StackTrace);
+                await _loggingService.LogErrorAsync("500", e.Message, e.StackTrace);
                 return Ok(new { message = e.Message });
             }
+        }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginDto model, CancellationToken cancellationToken = default)
