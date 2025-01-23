@@ -52,34 +52,33 @@ namespace DopamineDetoxAPI.Controllers
         }
 
         [HttpPost("register")]
-        public IActionResult Register(RegisterDto model, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> Register(RegisterDto model, CancellationToken cancellationToken = default)
         {
-            return Ok(model);
-            //try
-            //{
-            //    if (!ModelState.IsValid || model == null)
-            //    {
-            //        return BadRequest(ModelState);
-            //    }
+            try
+            {
+                if (!ModelState.IsValid || model == null)
+                {
+                    return BadRequest(ModelState);
+                }
 
-            //    var user = new ApplicationUser { UserName = model.Email, Email = model.Email, FirstName = model.FirstName, LastName = model.LastName };
-            //    var result = await _userManager.CreateAsync(user, model.Password ?? "");
-            //    if (result.Succeeded)
-            //    {
-            //        if (model.IsAdmin)
-            //        {
-            //            await _userManager.AddToRoleAsync(user, "Admin");
-            //        }
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, FirstName = model.FirstName, LastName = model.LastName };
+                var result = await _userManager.CreateAsync(user, model.Password ?? "");
+                if (result.Succeeded)
+                {
+                    if (model.IsAdmin)
+                    {
+                        await _userManager.AddToRoleAsync(user, "Admin");
+                    }
 
-            //        return Ok(new { message = "User registered successfully" });
-            //    }
-            //    return BadRequest(result.Errors);
-            //}
-            //catch (Exception e)
-            //{
-            //    await _loggingService.LogErrorAsync("500", e.Message, e.StackTrace);
-            //    return Ok(new { message = e.Message });
-            //}
+                    return Ok(new { message = "User registered successfully" });
+                }
+                return BadRequest(result.Errors);
+            }
+            catch (Exception e)
+            {
+                await _loggingService.LogErrorAsync("500", e.Message, e.StackTrace);
+                return Ok(new { message = e.Message });
+            }
         }
 
         [HttpPost("login")]

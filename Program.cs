@@ -27,25 +27,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
-//builder.Services.AddCors(options =>
-//{
-//    options.AddPolicy("AllowAngularApp", builder =>
-//    {
-//        builder.WithOrigins("http://localhost:4200") // Replace with your Angular app's URL
-//               .AllowAnyMethod()
-//               .AllowAnyHeader()
-//               .AllowCredentials();
-//    });
-//});
-
 builder.Services.AddMemoryCache();
-
-builder.Services.AddAuthentication()
-    .AddGoogle(options =>
-    {
-        options.ClientId = configuration["Authentication:Google:ClientId"] ?? "";
-        options.ClientSecret = configuration["Authentication:Google:ClientSecret"] ?? "";
-    });
 
 builder.Services.AddAutoMapper(cfg =>
 {
@@ -87,22 +69,6 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IEmailTemplateService, EmailTemplateService>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
 
-//string cloudEmailConnectionString = configuration["Azure:CommunicationServices:ConnectionString"] ?? "";
-//string cloudSenderAddress = configuration["Azure:CommunicationServices:SenderAddress"] ?? "";
-
-//if (!String.IsNullOrEmpty(cloudEmailConnectionString) && !String.IsNullOrEmpty(cloudSenderAddress))
-//{
-//    builder.Services.AddScoped<ICloudEmailService>(sp =>
-//    {
-//        var emailTemplateService = sp.GetRequiredService<IEmailTemplateService>();
-//        return new CloudEmailService(
-//            cloudEmailConnectionString,
-//            cloudSenderAddress,
-//            emailTemplateService
-//        );
-//    });
-//}
-
 // In Program.cs, modify the OpenAI client registration
 builder.Services.AddSingleton<ChatClient>(sp =>
 {
@@ -143,20 +109,29 @@ builder.Services.AddHttpClient<IChannelService, ChannelService>(client =>
 });
 
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
     {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = configuration["Jwt:Issuer"],
-            ValidAudience = configuration["Jwt:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]))
-        };
-    });
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = configuration["Jwt:Issuer"],
+        ValidAudience = configuration["Jwt:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]))
+    };
+})
+.AddGoogle(options =>
+{
+    options.ClientId = configuration["Authentication:Google:ClientId"] ?? "";
+    options.ClientSecret = configuration["Authentication:Google:ClientSecret"] ?? "";
+});
 
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 
