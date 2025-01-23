@@ -30,10 +30,11 @@ namespace DopamineDetoxAPI.Controllers
         private readonly ITopSearchResultService _topSearchResultService;
         private readonly IMapper _mapper;
         private readonly INotificationService _notificationService;
+        private readonly ILoggingService _loggingService;
 
         public UserController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, 
             IJwtService jwtService,IOptions<AppSettings> appSettings
-, ITopicService topicService, ISubTopicService subTopicService, IChannelService channelService, INoteService noteService, ITopSearchResultService topSearchResultService, IMapper mapper, INotificationService notificationService)
+, ITopicService topicService, ISubTopicService subTopicService, IChannelService channelService, INoteService noteService, ITopSearchResultService topSearchResultService, IMapper mapper, INotificationService notificationService, ILoggingService loggingService)
         {
             _context = context;
             _userManager = userManager;
@@ -47,31 +48,37 @@ namespace DopamineDetoxAPI.Controllers
             _topSearchResultService = topSearchResultService;
             _mapper = mapper;
             _notificationService = notificationService;
+            _loggingService = loggingService;
         }
 
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterDto model, CancellationToken cancellationToken = default)
         {
-            Console.WriteLine("Registering user...");
-
-            if (!ModelState.IsValid || model == null)
+            try
             {
-                return BadRequest(ModelState);
-            }
-            Console.WriteLine("Registering user 2...");
-            var user = new ApplicationUser { UserName = model.Email, Email = model.Email, FirstName = model.FirstName, LastName = model.LastName };
-            var result = await _userManager.CreateAsync(user, model.Password ?? "");
-            if (result.Succeeded)
-            {
-                if (model.IsAdmin)
+                if (!ModelState.IsValid || model == null)
                 {
-                    await _userManager.AddToRoleAsync(user, "Admin");
+                    return BadRequest(ModelState);
                 }
 
-                return Ok(new { message = "User registered successfully" });
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, FirstName = model.FirstName, LastName = model.LastName };
+                var result = await _userManager.CreateAsync(user, model.Password ?? "");
+                if (result.Succeeded)
+                {
+                    if (model.IsAdmin)
+                    {
+                        await _userManager.AddToRoleAsync(user, "Admin");
+                    }
+
+                    return Ok(new { message = "User registered successfully" });
+                }
+                return BadRequest(result.Errors);
             }
-            return BadRequest(result.Errors);
-        }
+            catch(Exception e)
+            {
+                await _loggingService.LogErrorAsync("500",e.Message, e.StackTrace);
+                return Ok(new { message = e.Message });
+            }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginDto model, CancellationToken cancellationToken = default)
