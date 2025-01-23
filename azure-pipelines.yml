@@ -118,7 +118,7 @@ stages:
               deploymentMethod: 'auto'
               enableCustomDeployment: true
               removeAdditionalFilesFlag: true
-              appSettings: |
+              appSettings: |-
                 -WEBSITE_RUN_FROM_PACKAGE=0
                 -ASPNETCORE_ENVIRONMENT=Test
                 -Logging__LogLevel__Default=Information
