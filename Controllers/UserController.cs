@@ -52,11 +52,13 @@ namespace DopamineDetoxAPI.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterDto model, CancellationToken cancellationToken = default)
         {
+            Console.WriteLine("Registering user...");
+
             if (!ModelState.IsValid || model == null)
             {
                 return BadRequest(ModelState);
             }
-
+            Console.WriteLine("Registering user 2...");
             var user = new ApplicationUser { UserName = model.Email, Email = model.Email, FirstName = model.FirstName, LastName = model.LastName };
             var result = await _userManager.CreateAsync(user, model.Password ?? "");
             if (result.Succeeded)
