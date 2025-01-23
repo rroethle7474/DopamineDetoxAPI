@@ -91,16 +91,19 @@ namespace DopamineDetoxAPI.Controllers
             if (result.Succeeded)
             {
                 var user = await _userManager.FindByEmailAsync(model.Email);
-                var isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
                 if (user != null)
                 {
+                    var isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
+                    var userDto = _mapper.Map<ApplicationUserDto>(user);
+                    userDto.IsAdmin = isAdmin;
+
                     var token = _jwtService.GenerateJwtToken(user);
-                    var userDto = user.ToApplicationUserDto(_mapper);
                     return Ok(new { Token = token, Message = "Login successful", User = userDto });
                 }
             }
             return Unauthorized(new { User = (ApplicationUserDto)null, Response = "Unauthorized", ErrorCode = "401", Message = "Invalid username or password" });
         }
+
 
 
         [HttpGet("details/{username}")]
