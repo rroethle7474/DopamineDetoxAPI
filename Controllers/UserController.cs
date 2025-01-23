@@ -6,7 +6,6 @@ using DopamineDetoxAPI.Models;
 using DopamineDetoxAPI.Models.Entities;
 using DopamineDetoxAPI.Models.Requests;
 using DopamineDetoxAPI.Services.Interfaces;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -16,7 +15,7 @@ namespace DopamineDetoxAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class UserController : Controller
+    public class UserController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
@@ -104,7 +103,7 @@ namespace DopamineDetoxAPI.Controllers
             return Unauthorized(new { User = (ApplicationUserDto)null, Response = "Unauthorized", ErrorCode = "401", Message = "Invalid username or password" });
         }
 
-        [Authorize]
+
         [HttpGet("details/{username}")]
         public async Task<ActionResult<ApplicationUserDto>> GetUserDetails(string username, CancellationToken cancellationToken = default)
         {
