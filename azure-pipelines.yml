@@ -120,7 +120,6 @@ stages:
               removeAdditionalFilesFlag: true
               appSettings: >-
                 -WEBSITE_RUN_FROM_PACKAGE "0"
-                -SCM_DO_BUILD_DURING_DEPLOYMENT "true"
                 -ASPNETCORE_ENVIRONMENT "Test"
                 -Logging__LogLevel__Default "Information"
                 -Logging__LogLevel__Microsoft.AspNetCore "Warning"
@@ -190,7 +189,6 @@ stages:
               removeAdditionalFilesFlag: true
               appSettings: >-
                 -WEBSITE_RUN_FROM_PACKAGE "0"
-                -SCM_DO_BUILD_DURING_DEPLOYMENT "true"
                 -ASPNETCORE_ENVIRONMENT "Production"
                 -Logging__LogLevel__Default "Information"
                 -Logging__LogLevel__Microsoft.AspNetCore "Warning"
