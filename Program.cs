@@ -168,23 +168,9 @@ if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
 }
-
-// Add detailed error handling
-//app.Use(async (context, next) =>
-//{
-//    try
-//    {
-//        await next();
-//    }
-//    catch (Exception ex)
-//    {
-//        var logger = context.RequestServices
-//            .GetRequiredService<ILogger<Program>>();
-//        logger.LogError(ex, "Unhandled exception");
-//        throw;
-//    }
-//});
+app.UseRouting(); // Add this
 app.UseCors("AllowAll");
+app.UseAuthentication(); // Ensure this is present
 app.UseAuthorization();
 
 app.MapControllers();
