@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System.Net;
+using System.Web;
 
 namespace DopamineDetoxAPI.Controllers
 {
@@ -105,26 +106,20 @@ namespace DopamineDetoxAPI.Controllers
         }
 
 
-
+        // TO-DO MAKE THIS A POST METHOD SO THAT IT CAN BE SECURE
         [HttpGet("details/{username}")]
         public async Task<ActionResult<ApplicationUserDto>> GetUserDetails(string username, CancellationToken cancellationToken = default)
         {
-            var user = await _userManager.FindByNameAsync(username);
+            var decodedUsername = HttpUtility.UrlDecode(username);
+            var user = await _userManager.FindByNameAsync(decodedUsername);
             if (user == null)
             {
                 return NotFound(new { message = "User not found" });
             }
 
-            // Check if the current user has permission to view this user's details
-            // This is a basic check. You might want to implement more sophisticated authorization logic
-            if (User.Identity?.Name != username && !User.IsInRole("Admin"))
-            {
-                return Forbid();
-            }
             var isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
-
             var userDto = user.ToApplicationUserDto(_mapper);
-
+            userDto.IsAdmin = isAdmin;
             return Ok(userDto);
         }
 
@@ -162,6 +157,7 @@ namespace DopamineDetoxAPI.Controllers
             // Generate JWT token
             var token = _jwtService.GenerateJwtToken(user);
             var userDto = user.ToApplicationUserDto(_mapper);
+            userDto.IsAdmin = isAdmin;
             return Ok(new { Token = token, Message = "Google login successful", User = userDto });
         }
 
@@ -239,7 +235,7 @@ namespace DopamineDetoxAPI.Controllers
                 }
 
                 var userDto = user.ToApplicationUserDto(_mapper);
-
+                userDto.IsAdmin = model.IsAdmin;
                 return Ok(new { message = "Profile updated successfully", User = userDto });
             }
             return BadRequest(ModelState);
