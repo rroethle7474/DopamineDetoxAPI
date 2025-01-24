@@ -1,5 +1,4 @@
 using AutoMapper;
-using Azure.Core;
 using DopamineDetox.Domain.Dtos;
 using DopamineDetox.Domain.Models;
 using DopamineDetox.ServiceAgent.Requests;
@@ -19,7 +18,7 @@ namespace DopamineDetoxAPI.Controllers
         private readonly ILoggingService _logger;
         private readonly INotificationService _notificationService;
 
-        public WeeklySearchResultReportController(IWeeklySearchResultReportService weeklySearchResultReportService, ISearchResultService searchResultService, ICloudEmailService emailService, IUserService userService, IMapper mapper, ILoggingService logger, INotificationService notificationService)
+        public WeeklySearchResultReportController(IWeeklySearchResultReportService weeklySearchResultReportService, ISearchResultService searchResultService, IUserService userService, IMapper mapper, ILoggingService logger, INotificationService notificationService)
         {
             _weeklySearchResultReportService = weeklySearchResultReportService;
             _searchResultService = searchResultService;
