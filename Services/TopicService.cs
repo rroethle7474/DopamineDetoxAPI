@@ -83,36 +83,29 @@ namespace DopamineDetoxAPI.Services
 
         public async Task<IEnumerable<Topic>> GetTopicsAsync(GetTopicsRequest request, CancellationToken cancellationToken = default)
         {
-            return await _cacheService.GetOrCreate(
-                TopicCacheKey,
-                async () =>
+                var query = _context.Topics.AsQueryable();
+
+                if (request.Id.HasValue)
                 {
-                    var query = _context.Topics.AsQueryable();
+                    query = query.Where(t => t.Id == request.Id.Value);
+                }
 
-                    if (request.Id.HasValue)
-                    {
-                        query = query.Where(t => t.Id == request.Id.Value);
-                    }
+                if (request.IsActive.HasValue)
+                {
+                    query = query.Where(t => t.IsActive == request.IsActive.Value);
+                }
 
-                    if (request.IsActive.HasValue)
-                    {
-                        query = query.Where(t => t.IsActive == request.IsActive.Value);
-                    }
+                if (!string.IsNullOrEmpty(request.Term))
+                {
+                    query = query.Where(t => t.Term.Contains(request.Term));
+                }
 
-                    if (!string.IsNullOrEmpty(request.Term))
-                    {
-                        query = query.Where(t => t.Term.Contains(request.Term));
-                    }
+                if (!String.IsNullOrEmpty(request.UserId))
+                {
+                    query = query.Where(t => t.UserId == request.UserId);
+                }
 
-                    if (!String.IsNullOrEmpty(request.UserId))
-                    {
-                        query = query.Where(t => t.UserId == request.UserId);
-                    }
-
-                    return _mapper.Map<List<Topic>>(await query.ToListAsync(cancellationToken));
-                },
-                TimeSpan.FromHours(24)
-            );
+                return _mapper.Map<List<Topic>>(await query.ToListAsync(cancellationToken));
         }
 
         public async Task<Topic> UpdateTopicAsync(int id, Topic topicDto, CancellationToken cancellationToken = default)
