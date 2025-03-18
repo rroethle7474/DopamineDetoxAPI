@@ -180,7 +180,7 @@ app.Run();
 
 async Task CreateRoles(RoleManager<IdentityRole> roleManager)
 {
-    string[] roleNames = { "Admin" };
+    string[] roleNames = { "Admin", "Demo" };
     IdentityResult roleResult;
 
     foreach (var roleName in roleNames)
