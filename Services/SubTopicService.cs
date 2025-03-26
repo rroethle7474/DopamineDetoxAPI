@@ -40,7 +40,8 @@ namespace DopamineDetoxAPI.Services
                 IsActive = subTopic.IsActive,
                 Term = subTopic.Term,
                 UserId = subTopic.UserId,
-                TopicId = subTopic.TopicId
+                TopicId = subTopic.TopicId,
+                ExcludeFromTwitter = subTopic.ExcludeFromTwitter
             };
 
             _context.SubTopics.Add(st);
@@ -119,6 +120,7 @@ namespace DopamineDetoxAPI.Services
             }
 
             ste.IsActive = subTopic.IsActive;
+            ste.ExcludeFromTwitter = subTopic.ExcludeFromTwitter;   
             ste.Term = subTopic.Term;
             ste.UserId = subTopic.UserId;
             ste.TopicId = subTopic.TopicId;

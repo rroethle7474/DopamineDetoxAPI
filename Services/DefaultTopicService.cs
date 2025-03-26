@@ -38,6 +38,7 @@ namespace DopamineDetoxAPI.Services
             var ct = new DefaultTopicEntity
             {
                 Term = topic.Term.Trim(),
+                ExcludeFromTwitter = topic.ExcludeFromTwitter,
                 CreatedOn = DateTime.Now,
                 UpdatedOn = DateTime.Now
             };
@@ -61,6 +62,7 @@ namespace DopamineDetoxAPI.Services
             {
                 Id = topic.Id,
                 Term = topic.Term,
+                ExcludeFromTwitter = topic.ExcludeFromTwitter,
                 CreatedOn = topic.CreatedOn,
                 UpdatedOn = topic.UpdatedOn
             };
@@ -77,6 +79,7 @@ namespace DopamineDetoxAPI.Services
             {
                 Id = t.Id,
                 Term = t.Term,
+                ExcludeFromTwitter = t.ExcludeFromTwitter,
                 CreatedOn = t.CreatedOn,
                 UpdatedOn = t.UpdatedOn
             });
@@ -91,6 +94,7 @@ namespace DopamineDetoxAPI.Services
             }
 
             topic.Term = topicDto.Term;
+            topic.ExcludeFromTwitter = topicDto.ExcludeFromTwitter;
             topic.UpdatedOn = DateTime.Now;
 
             _context.DefaultTopics.Update(topic);

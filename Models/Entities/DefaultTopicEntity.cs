@@ -13,5 +13,7 @@ namespace DopamineDetoxAPI.Models.Entities
         [Required]
         [MaxLength(1000)]
         public string Term { get; set; } = "";
+
+        public bool ExcludeFromTwitter { get; set; } = false;
     }
 }

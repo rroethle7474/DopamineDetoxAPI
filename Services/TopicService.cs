@@ -44,7 +44,8 @@ namespace DopamineDetoxAPI.Services
             {
                 IsActive = topic.IsActive,
                 Term = topic.Term.Trim(),
-                UserId = topic.UserId
+                UserId = topic.UserId,
+                ExcludeFromTwitter = topic.ExcludeFromTwitter
             };
 
             _context.Topics.Add(ct);
@@ -74,7 +75,8 @@ namespace DopamineDetoxAPI.Services
                         Id = topic.Id,
                         IsActive = topic.IsActive,
                         Term = topic.Term,
-                        UserId = topic.UserId
+                        UserId = topic.UserId,
+                        ExcludeFromTwitter = topic.ExcludeFromTwitter
                     };
                 },
                 TimeSpan.FromHours(24)
@@ -117,6 +119,7 @@ namespace DopamineDetoxAPI.Services
             }
 
             topic.IsActive = topicDto.IsActive;
+            topic.ExcludeFromTwitter = topicDto.ExcludeFromTwitter;
             topic.Term = topicDto.Term;
             topic.UserId = topicDto.UserId;
             topic.UpdatedOn = DateTime.Now;

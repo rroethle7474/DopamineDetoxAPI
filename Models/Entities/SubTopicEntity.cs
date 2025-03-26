@@ -17,6 +17,9 @@ namespace DopamineDetoxAPI.Models.Entities
         public string UserId { get; set; }
         [Required]
         public int TopicId { get; set; }
+
+        public bool ExcludeFromTwitter { get; set; } = false;
+
         [ForeignKey("TopicId")]
         public TopicEntity Topic { get; set; }  // Navigation property
 
